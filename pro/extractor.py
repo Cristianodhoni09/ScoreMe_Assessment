@@ -75,7 +75,6 @@ def extract_pdf_tables(pdf_path, output_path):
     print(f"✅ Extracted to: {output_path}")
 
 if __name__ == "__main__":
-    # input_pdf = "sample_input/Dummy_Data.pdf"
     input_pdf = "sample_input/test31.pdf"
     output_file = "output/extracted_tables.xlsx"
     Path("output").mkdir(exist_ok=True)
