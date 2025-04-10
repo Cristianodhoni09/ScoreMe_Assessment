@@ -14,12 +14,9 @@ def extract_table_from_page(page):
         line1 = lines[i].strip()
         line2 = lines[i + 1].strip()
 
-        # Check if line1 starts with a valid date
         if re.match(r"\d{2}-[A-Z][a-z]{2}-\d{4}", line1[:11]):
-            # Merge both lines
             full_line = f"{line1} {line2}"
 
-            # Extract Date and Type
             date_match = re.match(r"(\d{2}-[A-Z][a-z]{2}-\d{4})\s+([TC])", line1)
             if not date_match:
                 i += 1
@@ -28,15 +25,12 @@ def extract_table_from_page(page):
             date = date_match.group(1)
             txn_type = date_match.group(2)
 
-            # Extract Balance (value before "Dr")
             balance_match = re.search(r'([\d,]+\.\d+)\s*Dr', full_line)
             balance = balance_match.group(1) if balance_match else ""
 
-            # Extract Amount (just before balance)
             amount_match = re.findall(r'([\d,]+\.\d+)', full_line)
             amount = amount_match[-2] if len(amount_match) >= 2 else ""
 
-            # Remove date, type, amount and balance to get description
             description_part = re.sub(rf"{date}\s+{txn_type}", '', full_line, 1)
             description_part = description_part.replace(amount, "").replace(balance, "").replace("Dr", "").strip()
 
@@ -49,7 +43,7 @@ def extract_table_from_page(page):
             }
 
             table_rows.append(row)
-            i += 2  # Skip next line (since we consumed 2 lines)
+            i += 2
         else:
             i += 1
 
@@ -72,7 +66,7 @@ def extract_pdf_tables(pdf_path, output_path):
 
     df = pd.DataFrame(all_rows)
     df.to_excel(output_path, index=False)
-    print(f"✅ Extracted to: {output_path}")
+    print(f"Extracted to: {output_path}")
 
 if __name__ == "__main__":
     input_pdf = "sample_input/test31.pdf"
